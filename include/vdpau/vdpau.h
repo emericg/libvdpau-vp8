@@ -3047,6 +3047,92 @@ typedef struct {
     /** Copy of the VP8 bitstream field. Key Frames-only. */
     uint16_t height;
 
+    /** Copy of the VP8 bitstream field. Key Frames-only. */
+    VdpBool color_space;
+    /** Copy of the VP8 bitstream field. Key Frames-only. */
+    VdpBool clamping_type;
+
+    /** Copy of the VP8 bitstream field. */
+    VdpBool segmentation_enable;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool update_mb_segmentation_map;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool update_segment_feature_data;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool segment_feature_mode;
+    /** Derived from quantizer_update, quantizer_update_value, quantizer_update_sign. */
+    int8_t segment_base_quant[4];
+    /** Derived from loop_filter_update, lf_update_value, lf_update_sign. */
+    uint8_t segment_filter_level[4];
+    /** Copy of the VP8 bitstream field. */
+    uint8_t segment_prob[3];
+
+    /** Copy of the VP8 bitstream field. */
+    VdpBool filter_type;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t loop_filter_level;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t sharpness_level;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool loop_filter_adj_enable;
+    /** Derived from ref_frame_delta_update_flag, delta_magnitude, delta_sign. */
+    int8_t filter_ref_value[4];
+    /** Derived from mb_mode_delta_update_flag, delta_magnitude, delta_sign. */
+    int8_t filter_mode_value[4];
+
+    /** Derived from log2_nbr_of_dct_partitions */
+    uint8_t num_coeff_partitions;
+
+    /**
+     * Dequantization indices are used to retrieve dequantization factors from
+     * fixed quantization tables.
+     *
+     * When frame segmentation is enabled, macroblocks can have one of four
+     * different sets of dequantization indices. Otherwise, only the first
+     * segment's values are used.
+     * For each one of the *_qi tables inside a dquant set :
+     * [0] DC dequantization indices. [1] AC dequantization indices.
+     */
+    struct {
+        int16_t luma_qi[2];
+        int16_t luma_dc_qi[2];
+        int16_t chroma_qi[2];
+    } dquant[4];
+
+    /** Copy of the VP8 bitstream field. */
+    VdpBool refresh_entropy_probs;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool refresh_golden_frame;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool refresh_alternate_frame;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool sign_bias_golden;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool sign_bias_alternate;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool refresh_last;
+
+    /** Copy of the VP8 bitstream field. */
+    uint8_t coeff_prob[4][8][3][11];
+
+    /** Copy of the VP8 bitstream field. */
+    VdpBool mb_no_skip_coeff;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t prob_skip_false;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t prob_intra;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t prob_last;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t prob_gf;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t intra_16x16_prob[4];
+    /** Copy of the VP8 bitstream field. */
+    uint8_t intra_chroma_prob[3];
+
+    /** Copy of the VP8 bitstream field. */
+    uint8_t prob[2][19];
+
     /**
      * One frame worth of decompressed data from the arbitrarily distant past.
      * Set to VDP_INVALID_HANDLE when not used.
