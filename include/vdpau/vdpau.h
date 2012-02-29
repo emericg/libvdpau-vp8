@@ -2705,7 +2705,7 @@ typedef struct {
 } VdpPictureInfoMPEG1Or2;
 
 /**
- * \brief Information about an H.264 reference frame
+ * \brief Information about an H.264 reference frame.
  *
  * Note: References to "copy of bitstream field" in the field descriptions
  * may refer to data literally parsed from the bitstream, or derived from
@@ -3507,8 +3507,8 @@ typedef VdpStatus VdpVideoMixerQueryParameterValueRange(
     VdpDevice              device,
     VdpVideoMixerParameter parameter,
     /* output parameters follow */
-    void *                min_value,
-    void *                max_value
+    void *                 min_value,
+    void *                 max_value
 );
 
 /**
@@ -3525,8 +3525,8 @@ typedef VdpStatus VdpVideoMixerQueryAttributeValueRange(
     VdpDevice              device,
     VdpVideoMixerAttribute attribute,
     /* output parameters follow */
-    void *                min_value,
-    void *                max_value
+    void *                 min_value,
+    void *                 max_value
 );
 
 /**
@@ -4124,7 +4124,7 @@ typedef VdpStatus VdpPresentationQueueQuerySurfaceStatus(
  */
 typedef void VdpPreemptionCallback(
     VdpDevice device,
-    void *   context
+    void *    context
 );
 
 /**
@@ -4140,7 +4140,7 @@ typedef void VdpPreemptionCallback(
 typedef VdpStatus VdpPreemptionCallbackRegister(
     VdpDevice             device,
     VdpPreemptionCallback callback,
-    void *               context
+    void *                context
 );
 
 /*@}*/
@@ -4317,5 +4317,4 @@ typedef VdpStatus VdpGetProcAddress(
 }
 #endif
 
-#endif
-
+#endif /* _VDPAU_H */
