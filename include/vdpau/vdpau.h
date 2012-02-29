@@ -432,6 +432,16 @@
  * Include all slices beginning with start codes 0x000001B6. The slice start
  * code must be included for all slices.
  *
+ * \subsection bitstream_vp8 VP8
+ *
+ * Include all frames. The key frame start code 0x9D012A found in the frame
+ * header must be included for all frames.
+ *
+ * Note that if desired:
+ *
+ * - The start code may be included in a separate bitstream buffer array
+ *   entry to the actual frame data extracted from the bitstream.
+ *
  * \section video_mixer_usage Video Mixer Usage
  *
  * \subsection video_surface_content VdpVideoSurface Content
@@ -2437,6 +2447,14 @@ typedef uint32_t VdpDecoderProfile;
 #define VDP_DECODER_PROFILE_DIVX5_HOME_THEATER          (VdpDecoderProfile)20
 /** \hideinitializer */
 #define VDP_DECODER_PROFILE_DIVX5_HD_1080P              (VdpDecoderProfile)21
+/** \hideinitializer */
+#define VDP_DECODER_PROFILE_VP8_V0                      (VdpDecoderProfile)22
+/** \hideinitializer */
+#define VDP_DECODER_PROFILE_VP8_V1                      (VdpDecoderProfile)23
+/** \hideinitializer */
+#define VDP_DECODER_PROFILE_VP8_V2                      (VdpDecoderProfile)24
+/** \hideinitializer */
+#define VDP_DECODER_PROFILE_VP8_V3                      (VdpDecoderProfile)25
 
 /** \hideinitializer */
 #define VDP_DECODER_LEVEL_MPEG1_NA 0
@@ -2530,6 +2548,9 @@ typedef uint32_t VdpDecoderProfile;
 
 /** \hideinitializer */
 #define VDP_DECODER_LEVEL_DIVX_NA 0
+
+/** \hideinitializer */
+#define VDP_DECODER_LEVEL_VP8_NA 0
 
 /**
  * \brief Query the implementation's VdpDecoder capabilities.
@@ -2995,6 +3016,56 @@ typedef VdpPictureInfoMPEG4Part2 VdpPictureInfoDivX4;
  * parameter structure is re-used.
  */
 typedef VdpPictureInfoMPEG4Part2 VdpPictureInfoDivX5;
+
+/**
+ * \brief Picture parameter information for a VP8 picture.
+ *
+ * Based on RFC 6386 "VP8 Data Format and Decoding Guide" section 9 "Frame
+ * Header" and Annex A "Bitstream Syntax".
+ * The RFC 6386 is available at http://datatracker.ietf.org/doc/rfc6386/.
+ *
+ * Note: References to "copy of bitstream field" in the field descriptions
+ * may refer to data literally parsed from the bitstream, or derived from
+ * the bitstream using a mechanism described in the specification.
+ */
+typedef struct {
+    /** Copy of the VP8 bitstream field. */
+    VdpBool key_frame;
+    /** Copy of the VP8 bitstream field. */
+    uint8_t version;
+    /** Copy of the VP8 bitstream field. */
+    VdpBool show_frame;
+    /** Copy of the VP8 bitstream field. */
+    uint32_t first_part_size;
+
+    /** Copy of the VP8 bitstream field. Key Frames-only. */
+    uint8_t horizontal_scale;
+    /** Copy of the VP8 bitstream field. Key Frames-only. */
+    uint16_t width;
+    /** Copy of the VP8 bitstream field. Key Frames-only. */
+    uint8_t vertical_scale;
+    /** Copy of the VP8 bitstream field. Key Frames-only. */
+    uint16_t height;
+
+    /**
+     * One frame worth of decompressed data from the arbitrarily distant past.
+     * Set to VDP_INVALID_HANDLE when not used.
+     */
+    VdpVideoSurface golden_frame;
+
+    /**
+     * Alternate reference frames are decoded normally but most of the time only
+     * used as reference for other frames and not shown to the user.
+     * Set to VDP_INVALID_HANDLE when not used.
+     */
+    VdpVideoSurface altref_frame;
+
+    /**
+     * The immediately previous frame can always be used as reference.
+     * Set to VDP_INVALID_HANDLE when not used.
+     */
+    VdpVideoSurface previous_frame;
+} VdpPictureInfoVP8;
 
 /**
  * \brief Decode a compressed field/frame and render the result
